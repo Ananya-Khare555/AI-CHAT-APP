@@ -14,6 +14,10 @@ export const authOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/",        // optional
+  },
+
   callbacks: {
   async jwt({ token, account, profile }) {
     if (account?.provider === "github") {
@@ -44,8 +48,15 @@ export const authOptions = {
       session.user.id = token.userId
     }
     return session
-  }
-}
+  },
+  async redirect({ url, baseUrl }) {
+      // Always redirect to /chat after login
+      if (url.startsWith(baseUrl)) {
+        return `${baseUrl}/chat`
+      }
+      return baseUrl
+    },
+  },
 
 
 
